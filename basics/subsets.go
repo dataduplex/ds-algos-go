@@ -61,6 +61,42 @@ func getKSubsets_2(nums []int, k int) [][]int {
 	return result
 }
 
+/*
+
+generate all subsets
+1 2 3 4
+
+[[1]]
+[1] [2 3 4] (2 23 24 3 34 4 234)
+
+*/
+
+func getAllSubsets(nums []int) [][]int {
+
+	var subsets func(int) [][]int
+	subsets = func(start int) [][]int {
+		result := [][]int{}
+		result = append(result, []int{nums[start]})
+		if start == len(nums)-1 {
+			return result
+		}
+
+		partialSet := subsets(start + 1)
+		partialSetPlusThis := [][]int{}
+		for _, set := range partialSet {
+			result = append(result, set)
+			arr := make([]int, len(set))
+			copy(arr, set)
+			arr = append([]int{nums[start]}, arr...)
+			partialSetPlusThis = append(partialSetPlusThis, arr)
+		}
+		result = append(result, partialSetPlusThis...)
+		return result
+	}
+	return subsets(0)
+}
+
 func main() {
-	fmt.Println(getKSubsets_2([]int{1, 2, 3, 4, 5, 6}, 3))
+	//fmt.Println(getKSubsets_2([]int{1, 2, 3, 4, 5, 6}, 3))
+	fmt.Println(getAllSubsets([]int{1, 2, 3}))
 }
